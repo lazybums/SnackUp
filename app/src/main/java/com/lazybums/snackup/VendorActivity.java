@@ -5,4 +5,5 @@ package com.lazybums.snackup;
  */
 public class VendorActivity {
 
+
 }
