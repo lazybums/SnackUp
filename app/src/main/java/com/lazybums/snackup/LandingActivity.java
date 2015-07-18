@@ -25,12 +25,13 @@ public class LandingActivity  extends Activity {
     String city;
     String mall;
     String vendor;
-    String [] malls = {""};
+    String[] malls = {""};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_landing);
-        citySpinner = (Spinner)findViewById(R.id.citySpinner);
+        citySpinner = (Spinner) findViewById(R.id.citySpinner);
         ArrayAdapter<String> adapter;
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, cities);
@@ -54,7 +55,7 @@ public class LandingActivity  extends Activity {
                 }
         );
         malls = (String[]) getMallsFromCity(city);
-        mallSpinner = (Spinner)findViewById(R.id.mallSpinner);
+        mallSpinner = (Spinner) findViewById(R.id.mallSpinner);
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, malls);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -94,8 +95,9 @@ public class LandingActivity  extends Activity {
         });
     }
 
-    private String [] getMallsFromCity (String city) {
-        String [] malls = {"Pvr Banjara Hills", "Prasads Imax Screen", "Cinemax Inorbit"};
+    private String[] getMallsFromCity(String city) {
+        String[] malls = {"Pvr Banjara Hills", "Prasads Imax Screen", "Cinemax Inorbit"};
         return malls;
     }
+
 }

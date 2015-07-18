@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:paddingBottom="25dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="Chicken Pizza"
+            android:layout_gravity="start"
+            android:id="@+id/item_titleTextView"
+            android:layout_weight="0.75"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="Rs.200"
+            android:layout_gravity="end"
+            android:id="@+id/item_priceView"
+            android:layout_weight="0.25"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="100px"
+                android:text="-"/>
+
+            <TextView
+                android:layout_width="70px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/item_quantityTextView"/>
+
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="100px"
+                android:text="+"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="0.33" />
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Add to Cart"
+            android:id="@+id/addToCart"
+            android:layout_gravity="end"
+            android:backgroundTint="#ffffc453"
+            android:shadowColor="#ffffcea7"
+            android:layout_weight="0.33"
+            android:background="#ffffb551" />
+    </LinearLayout>
+
+
+</LinearLayout>

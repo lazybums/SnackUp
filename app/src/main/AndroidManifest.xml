@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -21,9 +20,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.lazybums.snackup.VendorActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Light">
+        </activity>
+        <activity
             android:name="com.lazybums.snackup.LandingActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.Holo.Light">
         </activity>
     </application>
 
