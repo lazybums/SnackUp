@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
+//hey guys let's go
 public class SplashActivity extends Activity {
 
     @Override
