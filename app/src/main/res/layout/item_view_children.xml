@@ -48,17 +48,20 @@
             <Button
                 android:layout_height="wrap_content"
                 android:layout_width="100px"
+                android:id="@+id/minusButton"
                 android:text="-"/>
 
             <TextView
                 android:layout_width="70px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="0"
                 android:id="@+id/item_quantityTextView"/>
 
             <Button
                 android:layout_height="wrap_content"
                 android:layout_width="100px"
+                android:id="@+id/plusButton"
                 android:text="+"/>
         </LinearLayout>
 

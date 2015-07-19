@@ -2,7 +2,6 @@ package com.lazybums.snackup.item;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 /**
  * Created by amsingha on 7/18/2015.
  */
@@ -12,11 +11,12 @@ public class Item implements Parcelable {
     private String mQuantity;
     private String mVendor;
 
-    public Item(String price, String title, String quantity) {
+    public Item(String price, String title, String quantity, String vendor) {
         super();
         mPrice = price;
         mTitle = title;
         mQuantity = quantity;
+        mVendor = vendor;
     }
 
     public String getPrice() {
@@ -43,19 +43,14 @@ public class Item implements Parcelable {
         mQuantity = quantity;
     }
 
-    public String getmVendor(){return mVendor; }
+    public String getVendor(){return mVendor; }
 
-    public void setmVendor(String vendor){this.mVendor = vendor; }
+    public void setVendor(String vendor){this.mVendor = vendor; }
 
     public static final Parcelable.Creator<Item> CREATOR = new Creator<Item>() {
         @Override
         public Item createFromParcel(Parcel source) {
-
-            Item item = new Item();
-            item.mVendor = source.readString();
-            item.mPrice = source.readString();
-            item.mQuantity = source.readString();
-            item.mTitle = source.readString();
+            Item item = new Item(source.readString(),source.readString(),source.readString(),source.readString());
 
             return item;
         }
@@ -74,9 +69,9 @@ public class Item implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mVendor);
-        dest.writeString(mQuantity);
         dest.writeString(mPrice);
         dest.writeString(mTitle);
+        dest.writeString(mQuantity);
+        dest.writeString(mVendor);
     }
 }
