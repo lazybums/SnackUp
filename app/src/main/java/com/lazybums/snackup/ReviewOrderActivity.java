@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.lazybums.snackup.constants.Constants;
 import com.lazybums.snackup.item.Item;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class ReviewOrderActivity extends Activity {
         reviewOrder.setTextSize(R.dimen.textsize);
 
         Bundle bundle = getIntent().getExtras();
-        itemList = bundle.getParcelableArrayList("itemList");
+        itemList = bundle.getParcelableArrayList(Constants.itemList);
 
         for(int i = 0; i<itemList.size();i++){
 

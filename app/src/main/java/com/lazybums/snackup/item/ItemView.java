@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lazybums.snackup.R;
+import com.lazybums.snackup.VendorActivity;
+
+import java.util.HashMap;
 
 /**
  * Created by amsingha on 7/18/2015.
@@ -22,6 +26,8 @@ public class ItemView extends RelativeLayout{
     private Button mMinusButton;
     private Button mPlusButton;
     private Item item;
+    private Context context;
+    private HashMap<String, Item> cartItems;
 
     public static ItemView inflate(ViewGroup parent){
         ItemView itemView = (ItemView) LayoutInflater.from(parent.getContext())
@@ -40,6 +46,7 @@ public class ItemView extends RelativeLayout{
     public ItemView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         LayoutInflater.from(context).inflate(R.layout.item_view_children, this, true);
+        this.context = context;
         setupChildren();
     }
 
@@ -84,6 +91,12 @@ public class ItemView extends RelativeLayout{
             @Override
             public void onClick(View v) {
                 Integer quantity = Integer.parseInt(mQuantityTextView.getText().toString());
+                if(quantity <= 0) {
+                    Toast.makeText(context, "0 items selected for " + mTitleTextView.getText(), Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    cartItems.put(item.getTitle(), item);
+                }
 
             }
         });
@@ -103,11 +116,12 @@ public class ItemView extends RelativeLayout{
         return getResources().getDimension(R.dimen.buttontextsize);
     }
 
-    public void setItem(Item item) {
+    public void setItem(Item item, HashMap<String, Item> cartItemsMap) {
         mTitleTextView.setText(item.getTitle());
         mQuantityTextView.setText(item.getQuantity());
         mPriceTextView.setText(item.getPrice());
         this.item = item;
+        this.cartItems = cartItemsMap;
     }
 
     public TextView getPriceTextView () {

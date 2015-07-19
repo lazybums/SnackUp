@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lazybums.snackup.VendorActivity;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by amsingha on 7/18/2015.
@@ -13,11 +16,14 @@ import java.util.ArrayList;
 public class ItemListFragment extends ListFragment {
     ArrayList<Item> items;
     String ARG_PAGE = "test";
+    HashMap<String, Item> cartItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
 
+        VendorActivity vendorActivity = (VendorActivity) getActivity();
+        cartItems = vendorActivity.getCartItemsMap();
         if(savedInstanceState == null) {
             items = new ArrayList<Item>();
             for (int i = 0; i < 10; i++) {
@@ -31,7 +37,7 @@ public class ItemListFragment extends ListFragment {
         else {
             items = savedInstanceState.getParcelableArrayList(ARG_PAGE);
         }
-        setListAdapter(new ItemAdapter(getActivity(), items));
+        setListAdapter(new ItemAdapter(getActivity(), items, cartItems));
         return v;
     }
 
