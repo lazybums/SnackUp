@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 
 public class SplashActivity extends Activity {
     AlertDialog dialog;
@@ -82,7 +84,13 @@ public class SplashActivity extends Activity {
 
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
-            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+            String locality = null;
+            /*try {
+                locality = gps.getLocality();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude+"\nLocality: " + locality , Toast.LENGTH_LONG).show();
         }
 
         Thread mythread = new Thread() {
@@ -95,9 +103,9 @@ public class SplashActivity extends Activity {
                 } finally {
                     Intent intent = new Intent(SplashActivity.this,
                             LandingActivity.class);
-                    startActivity(intent);
                     intent.putExtra("latitude",latitude);
                     intent.putExtra("longitude",longitude);
+                    startActivity(intent);
                     finish();
                 }
             }

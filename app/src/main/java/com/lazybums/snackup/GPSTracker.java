@@ -8,6 +8,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +17,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.List;
 
 public class GPSTracker extends Service implements LocationListener {
 
@@ -32,6 +38,7 @@ public class GPSTracker extends Service implements LocationListener {
     Location location; // location
     double latitude; // latitude
     double longitude; // longitude
+    String locality;
 
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
@@ -129,6 +136,16 @@ public class GPSTracker extends Service implements LocationListener {
         return latitude;
     }
 
+    private void setLocality(double latitude, double longitude) throws IOException {
+        Geocoder geoCoder = new Geocoder(this);
+        List<Address> list = geoCoder.getFromLocation(latitude, longitude, 1);
+        if (list != null & list.size() > 0) {
+            Address address = list.get(0);
+            String result = address.getLocality();
+            locality = result;
+        }
+    }
+
     /**
      * Function to get longitude
      * */
@@ -139,6 +156,13 @@ public class GPSTracker extends Service implements LocationListener {
 
         // return longitude
         return longitude;
+    }
+
+    public String getLocality() throws IOException {
+        setLocality(latitude, longitude);
+        if(locality != null)
+            return locality;
+        return "Locality not found";
     }
 
     /**
