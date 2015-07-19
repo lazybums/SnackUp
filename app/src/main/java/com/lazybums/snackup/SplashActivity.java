@@ -17,32 +17,16 @@ import android.widget.Toast;
 public class SplashActivity extends Activity {
     AlertDialog dialog;
     AlertDialog.Builder build;
+    GPSTracker gps;
+    double latitude = 0.0;
+    double longitude = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         build = new AlertDialog.Builder(this);
-        if (NetworkManager.isConnected(this)) {
-            Toast.makeText(SplashActivity.this, "Internet is active", Toast.LENGTH_SHORT)
-                    .show();
-            Thread mythread = new Thread() {
-                public void run() {
-                    try {
-
-                        sleep(5000);
-
-                    } catch (Exception e) {
-                    } finally {
-                        Intent intent = new Intent(SplashActivity.this,
-                                LandingActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            };
-            mythread.start();
-        } else {
+        if (!NetworkManager.isConnected(this)) {
 
             build.setMessage("This application requires Internet connection.");
             build.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -91,6 +75,34 @@ public class SplashActivity extends Activity {
             dialog.show();
 
         }
+
+        gps = new GPSTracker(this);
+
+        if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+        }
+
+        Thread mythread = new Thread() {
+            public void run() {
+                try {
+
+                    sleep(5000);
+
+                } catch (Exception e) {
+                } finally {
+                    Intent intent = new Intent(SplashActivity.this,
+                            LandingActivity.class);
+                    startActivity(intent);
+                    intent.putExtra("latitude",latitude);
+                    intent.putExtra("longitude",longitude);
+                    finish();
+                }
+            }
+        };
+        mythread.start();
     }
 
 
