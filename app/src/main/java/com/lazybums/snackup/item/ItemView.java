@@ -73,7 +73,7 @@ public class ItemView extends RelativeLayout{
                 Integer quantity = Integer.parseInt(mQuantityTextView.getText().toString());
                 if (quantity < 0) {
                     //do nothing;
-                    // something is wrong here
+                    //should never reach here
                 } else {
                     quantity++;
                     setQuantityOnTextView(quantity, mQuantityTextView, mAddToCartButton);
