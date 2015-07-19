@@ -35,10 +35,10 @@ public class LandingActivity  extends Activity {
     Spinner citySpinner;
     Spinner mallSpinner;
     String city = "";
-    String mall;
+    String mall = "";
     String vendor;
-    String[] malls = {""};
-    double latitude = 0.0, longitude = 0.0;
+    List<String> malls = new ArrayList<>();
+    Double latitude = null, longitude = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +59,20 @@ public class LandingActivity  extends Activity {
         Toast.makeText(getApplicationContext(), "Your City is - " + city, Toast.LENGTH_LONG).show();
 
         citySpinner = (Spinner) findViewById(R.id.citySpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, Constants.cities);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        citySpinner.setAdapter(adapter);
-        citySpinner.setSelection(adapter.getPosition(city));
-
-        malls = (String[]) getMallsFromCity(city);
         mallSpinner = (Spinner) findViewById(R.id.mallSpinner);
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
+
+        ArrayAdapter<String> citySpinnerAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, Constants.cities);
+        citySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        citySpinner.setAdapter(citySpinnerAdapter);
+        citySpinner.setSelection(citySpinnerAdapter.getPosition(city));
+        malls.clear();
+        malls.addAll(getMallsFromCity(city));
+
+        ArrayAdapter<String> mallsSpinnerAdapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, malls);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mallSpinner.setAdapter(adapter1);
+        mallsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mallSpinner.setAdapter(mallsSpinnerAdapter);
 
         citySpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
@@ -80,7 +82,7 @@ public class LandingActivity  extends Activity {
                                                int arg2, long arg3) {
                         int position = citySpinner.getSelectedItemPosition();
                         city = String.valueOf(citySpinner.getSelectedItem());
-                        malls = (String[]) getMallsFromCity(city);
+                        malls.clear();malls.addAll(getMallsFromCity(city));
                         ((BaseAdapter) mallSpinner.getAdapter()).notifyDataSetChanged();
                         mallSpinner.setSelection(0);
                     }
@@ -138,13 +140,17 @@ public class LandingActivity  extends Activity {
         alertDialog.show();
     }
 
-    private String[] getMallsFromCity(String city) {
+    private List<String> getMallsFromCity(String city) {
         String[] hyderabadMalls = {"", "Pvr Banjara Hills", "Prasads Imax Screen", "Inorbit - Cinemax"};
         String[] bangaloreMalls = {"", "Mantri Square", "The Forum", "The ForumValue Mall"};
+        String[] result = {""};
         Map<String, String[]> cityMalls = new HashMap<>();
         cityMalls.put("Hyderabad", hyderabadMalls);
         cityMalls.put("Bangalore", bangaloreMalls);
-        return cityMalls.get(city);
+        if(cityMalls.containsKey(city)) {
+            result = cityMalls.get(city);
+        }
+        return Arrays.asList(result);
     }
 
 }

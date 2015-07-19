@@ -20,8 +20,8 @@ public class SplashActivity extends Activity {
     AlertDialog dialog;
     AlertDialog.Builder build;
     GPSTracker gps;
-    double latitude = 0.0;
-    double longitude = 0.0;
+    Double latitude = null;
+    Double longitude = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +103,10 @@ public class SplashActivity extends Activity {
                 } finally {
                     Intent intent = new Intent(SplashActivity.this,
                             LandingActivity.class);
-                    intent.putExtra("latitude",latitude);
-                    intent.putExtra("longitude",longitude);
+                    if(null != latitude && null != longitude) {
+                        intent.putExtra("latitude",latitude);
+                        intent.putExtra("longitude",longitude);
+                    }
                     startActivity(intent);
                     finish();
                 }
