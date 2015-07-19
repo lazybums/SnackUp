@@ -15,6 +15,6 @@ public class ReviewOrderActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_review);
         
-        reviewTextView = (TextView) findViewById(R.id.)
+        reviewTextView = (TextView) findViewById(R.id.reviewOrder);
     }
 }
