@@ -1,6 +1,7 @@
 package com.lazybums.snackup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,13 +11,20 @@ import android.widget.TextView;
  */
 public class VendorActivity extends Activity{
 
+    private String mMallName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_vendor);
-        TextView mVendorId = (TextView) findViewById(R.id.vendorName);
+
+        Bundle extras = getIntent().getExtras();
+        mMallName = extras.getString("Mall");
+
+        TextView mMallId = (TextView) findViewById(R.id.mallName);
+        mMallId.setText(mMallName);
+
         Button mCheckOutButton = (Button) findViewById(R.id.checkOutButton);
-        mVendorId.setTextSize(getTextDimension());
+        mMallId.setTextSize(getTextDimension());
         mCheckOutButton.setTextSize(getButtonTextDimension());
         //setContentView(R.layout.activity_list);
     }

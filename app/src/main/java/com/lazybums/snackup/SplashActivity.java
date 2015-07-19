@@ -90,7 +90,7 @@ public class SplashActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }*/
-            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude+"\nLocality: " + locality , Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude+"\nLocality: " + locality , Toast.LENGTH_LONG).show();
         }
 
         Thread mythread = new Thread() {

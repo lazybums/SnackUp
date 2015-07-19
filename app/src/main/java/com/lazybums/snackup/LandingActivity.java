@@ -13,7 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lazybums.snackup.constants.Constants;
@@ -34,8 +36,14 @@ import static java.lang.Thread.sleep;
 public class LandingActivity  extends Activity {
     Spinner citySpinner;
     Spinner mallSpinner;
+    TextView mScreenTextView;
+    TextView mSeatTextView;
+    EditText mScreenNum;
+    EditText mSeatNum;
     String city = "";
     String mall = "";
+    String mScreen;
+    String mSeat;
     String vendor;
     List<String> malls = new ArrayList<>();
     Double latitude = null, longitude = null;
@@ -60,6 +68,17 @@ public class LandingActivity  extends Activity {
 
         citySpinner = (Spinner) findViewById(R.id.citySpinner);
         mallSpinner = (Spinner) findViewById(R.id.mallSpinner);
+        mScreenTextView = (TextView) findViewById(R.id.screenTextView);
+        mSeatTextView = (TextView) findViewById(R.id.seatTextView);
+        mScreenNum = (EditText) findViewById(R.id.screenNum);
+        mSeatNum = (EditText) findViewById(R.id.seatNum);
+
+        //TODO: See what the problem is here
+        /*mScreenTextView.setText("Screen");
+        mScreenTextView.setTextSize(R.dimen.textsize);
+
+        mSeatTextView.setText("Seat");
+        mSeatTextView.setTextSize(R.dimen.textsize);*/
 
         ArrayAdapter<String> citySpinnerAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, Constants.cities);
@@ -113,10 +132,18 @@ public class LandingActivity  extends Activity {
 
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent(LandingActivity.this,
-                            VendorActivity.class);
-                    startActivity(intent);
-                    finish();
+
+                    //TODO:Do we need a sanity check here?
+                    if(mScreenNum.getText().toString().matches("") || mSeatNum.getText().toString().matches("")){
+                        Toast.makeText(getApplicationContext(),"Fill in the necessary details",Toast.LENGTH_LONG);
+                    }
+                    else {
+                        Intent intent = new Intent(LandingActivity.this,
+                                VendorActivity.class);
+                        intent.putExtra("Mall", mall);
+                        startActivity(intent);
+                        finish();
+                    }
             }
 
         });
