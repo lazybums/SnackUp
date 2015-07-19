@@ -1,4 +1,4 @@
-package com.lazybums.snackup;
+package com.lazybums.snackup.item;
 
 /**
  * Created by amsingha on 7/18/2015.

@@ -1,4 +1,4 @@
-package com.lazybums.snackup;
+package com.lazybums.snackup.item;
 
 import android.content.Context;
 import android.view.View;

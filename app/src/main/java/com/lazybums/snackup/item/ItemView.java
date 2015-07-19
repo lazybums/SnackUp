@@ -1,4 +1,4 @@
-package com.lazybums.snackup;
+package com.lazybums.snackup.item;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.lazybums.snackup.R;
 
 /**
  * Created by amsingha on 7/18/2015.
