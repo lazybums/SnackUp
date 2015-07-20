@@ -34,22 +34,24 @@ import static java.lang.Thread.sleep;
  * Activity to select city and Mall.
  */
 public class LandingActivity  extends Activity {
-    Spinner citySpinner;
-    Spinner mallSpinner;
+    Spinner mCitySpinner;
+    Spinner mMallSpinner;
     TextView mScreenTextView;
     TextView mSeatTextView;
     EditText mScreenNum;
     EditText mSeatNum;
-    String city = "";
-    String mall = "";
+    Button mProceedButton;
     String mScreen;
     String mSeat;
-    String vendor;
+    String mCity = "";
+    String mMall = "";
+    String mVendor;
     List<String> malls = new ArrayList<>();
     Double latitude = null, longitude = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_landing);
 
@@ -59,19 +61,20 @@ public class LandingActivity  extends Activity {
             Bundle extras = getIntent().getExtras();
             latitude = extras.getDouble(Constants.latitude);
             longitude = extras.getDouble(Constants.longitude);
-            city = geocoder.getFromLocation(latitude, longitude, 1).get(0).getLocality();
+            mCity = geocoder.getFromLocation(latitude, longitude, 1).get(0).getLocality();
             }
         }  catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(getApplicationContext(), "Your City is - " + city, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Your City is - " + mCity, Toast.LENGTH_LONG).show();
 
-        citySpinner = (Spinner) findViewById(R.id.citySpinner);
-        mallSpinner = (Spinner) findViewById(R.id.mallSpinner);
+        mCitySpinner = (Spinner) findViewById(R.id.citySpinner);
+        mMallSpinner = (Spinner) findViewById(R.id.mallSpinner);
         mScreenTextView = (TextView) findViewById(R.id.screenTextView);
         mSeatTextView = (TextView) findViewById(R.id.seatTextView);
         mScreenNum = (EditText) findViewById(R.id.screenNum);
         mSeatNum = (EditText) findViewById(R.id.seatNum);
+        mProceedButton = (Button) findViewById(R.id.proceedButton);
 
         //TODO: See what the problem is here
         /*mScreenTextView.setText("Screen");
@@ -83,27 +86,33 @@ public class LandingActivity  extends Activity {
         ArrayAdapter<String> citySpinnerAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, Constants.cities);
         citySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        citySpinner.setAdapter(citySpinnerAdapter);
-        citySpinner.setSelection(citySpinnerAdapter.getPosition(city));
+        mCitySpinner.setAdapter(citySpinnerAdapter);
+        mCitySpinner.setSelection(citySpinnerAdapter.getPosition(mCity));
         malls.clear();
-        malls.addAll(getMallsFromCity(city));
+        malls.addAll(getMallsFromCity(mCity));
 
         ArrayAdapter<String> mallsSpinnerAdapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, malls);
         mallsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mallSpinner.setAdapter(mallsSpinnerAdapter);
+        mMallSpinner.setAdapter(mallsSpinnerAdapter);
 
-        citySpinner.setOnItemSelectedListener(
+        mScreenNum.setEnabled(false);
+        mSeatNum.setEnabled(false);
+
+        mCitySpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
 
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View arg1,
                                                int arg2, long arg3) {
-                        int position = citySpinner.getSelectedItemPosition();
-                        city = String.valueOf(citySpinner.getSelectedItem());
-                        malls.clear();malls.addAll(getMallsFromCity(city));
-                        ((BaseAdapter) mallSpinner.getAdapter()).notifyDataSetChanged();
-                        mallSpinner.setSelection(0);
+                        int position = mCitySpinner.getSelectedItemPosition();
+                        mCity = String.valueOf(mCitySpinner.getSelectedItem());
+                        malls.clear();
+                        malls.addAll(getMallsFromCity(mCity));
+                        ((BaseAdapter) mMallSpinner.getAdapter()).notifyDataSetChanged();
+                        mMallSpinner.setSelection(0);
+                        mScreenNum.setEnabled(false);
+                        mSeatNum.setEnabled(false);
                     }
 
                     @Override
@@ -112,14 +121,21 @@ public class LandingActivity  extends Activity {
                 }
         );
 
-        mallSpinner.setOnItemSelectedListener(
+        mMallSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
 
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View arg1,
                                                int arg2, long arg3) {
-                        int position = mallSpinner.getSelectedItemPosition();
-                        mall = String.valueOf(mallSpinner.getSelectedItem());
+                        int position = mMallSpinner.getSelectedItemPosition();
+                        mMall = String.valueOf(mMallSpinner.getSelectedItem());
+                        if(!"".equalsIgnoreCase(mMall)) {
+                            mScreenNum.setEnabled(true);
+                            mSeatNum.setEnabled(true);
+                        } else {
+                            mScreenNum.setEnabled(false);
+                            mSeatNum.setEnabled(false);
+                        }
                     }
 
                     @Override
@@ -127,8 +143,8 @@ public class LandingActivity  extends Activity {
                     }
                 }
         );
-        Button btnSubmit = (Button) findViewById(R.id.proceedButton);
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+
+        mProceedButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -140,7 +156,7 @@ public class LandingActivity  extends Activity {
                     else {
                         Intent intent = new Intent(LandingActivity.this,
                                 VendorActivity.class);
-                        intent.putExtra("Mall", mall);
+                        intent.putExtra("Mall", mMall);
                         startActivity(intent);
                         finish();
                     }
