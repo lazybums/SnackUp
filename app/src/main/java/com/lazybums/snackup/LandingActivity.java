@@ -5,9 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lazybums.snackup.database.DynamoDBClientManager;
+import com.lazybums.snackup.database.DynamoDBDAO;
 import com.lazybums.snackup.constants.Constants;
 
 import java.io.IOException;
@@ -48,12 +49,12 @@ public class LandingActivity  extends Activity {
     String mVendor;
     List<String> malls = new ArrayList<>();
     Double latitude = null, longitude = null;
+    private List<String> mallList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_landing);
 
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
@@ -67,6 +68,12 @@ public class LandingActivity  extends Activity {
             e.printStackTrace();
         }
         Toast.makeText(getApplicationContext(), "Your City is - " + mCity, Toast.LENGTH_LONG).show();
+        new GetMallList().execute();
+        //setupActivity();
+    }
+
+    private void setupActivity() {
+        setContentView(R.layout.layout_landing);
 
         mCitySpinner = (Spinner) findViewById(R.id.citySpinner);
         mMallSpinner = (Spinner) findViewById(R.id.mallSpinner);
@@ -89,7 +96,6 @@ public class LandingActivity  extends Activity {
         mCitySpinner.setAdapter(citySpinnerAdapter);
         mCitySpinner.setSelection(citySpinnerAdapter.getPosition(mCity));
         malls.clear();
-        malls.addAll(getMallsFromCity(mCity));
 
         ArrayAdapter<String> mallsSpinnerAdapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, malls);
@@ -99,27 +105,7 @@ public class LandingActivity  extends Activity {
         mScreenNum.setEnabled(false);
         mSeatNum.setEnabled(false);
 
-        mCitySpinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        int position = mCitySpinner.getSelectedItemPosition();
-                        mCity = String.valueOf(mCitySpinner.getSelectedItem());
-                        malls.clear();
-                        malls.addAll(getMallsFromCity(mCity));
-                        ((BaseAdapter) mMallSpinner.getAdapter()).notifyDataSetChanged();
-                        mMallSpinner.setSelection(0);
-                        mScreenNum.setEnabled(false);
-                        mSeatNum.setEnabled(false);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                    }
-                }
-        );
+        setValuesInSpinner();
 
         mMallSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
@@ -151,7 +137,7 @@ public class LandingActivity  extends Activity {
 
                     //TODO:Do we need a sanity check here?
                     if(mScreenNum.getText().toString().matches("") || mSeatNum.getText().toString().matches("")){
-                        Toast.makeText(getApplicationContext(),"Fill in the necessary details",Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(), "Fill in the necessary details", Toast.LENGTH_LONG);
                     }
                     else {
                         Intent intent = new Intent(LandingActivity.this,
@@ -163,6 +149,31 @@ public class LandingActivity  extends Activity {
             }
 
         });
+    }
+
+    private void setValuesInSpinner() {
+        malls.addAll(mallList);
+        mCitySpinner.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                               int arg2, long arg3) {
+                        int position = mCitySpinner.getSelectedItemPosition();
+                        mCity = String.valueOf(mCitySpinner.getSelectedItem());
+                        malls.clear();
+                        malls.addAll(mallList);
+                        ((BaseAdapter) mMallSpinner.getAdapter()).notifyDataSetChanged();
+                        mMallSpinner.setSelection(0);
+                        mScreenNum.setEnabled(false);
+                        mSeatNum.setEnabled(false);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
+                }
+        );
     }
 
     @Override
@@ -188,12 +199,32 @@ public class LandingActivity  extends Activity {
         String[] bangaloreMalls = {"", "Mantri Square", "The Forum", "The ForumValue Mall"};
         String[] result = {""};
         Map<String, String[]> cityMalls = new HashMap<>();
-        cityMalls.put("Hyderabad", hyderabadMalls);
+        if(city.compareTo("Hyderabad") == 0) {
+            DynamoDBClientManager ddbManager = new DynamoDBClientManager(this);
+            List<String> mallList = DynamoDBDAO.getMallList(ddbManager.ddb(), city);
+            cityMalls.put("Hyderabad", (String[])mallList.toArray());
+        }
         cityMalls.put("Bangalore", bangaloreMalls);
         if(cityMalls.containsKey(city)) {
             result = cityMalls.get(city);
         }
         return Arrays.asList(result);
+    }
+
+
+    private class GetMallList extends AsyncTask<Void, Void, Void> {
+
+        protected Void doInBackground(Void... voids) {
+
+            mallList = getMallsFromCity(mCity);
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+
+            //setValuesInSpinner();
+            setupActivity();
+        }
     }
 
 }
