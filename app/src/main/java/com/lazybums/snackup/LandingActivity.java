@@ -201,8 +201,8 @@ public class LandingActivity  extends Activity {
         Map<String, String[]> cityMalls = new HashMap<>();
         if(city.compareTo("Hyderabad") == 0) {
             DynamoDBClientManager ddbManager = new DynamoDBClientManager(this);
-            List<String> mallList = DynamoDBDAO.getMallList(ddbManager.ddb(), city);
-            cityMalls.put("Hyderabad", (String[])mallList.toArray());
+            List<String> listOfMalls = DynamoDBDAO.getMallList(ddbManager.ddb(), city);
+            cityMalls.put("Hyderabad", listOfMalls.toArray(new String[listOfMalls.size()]));
         }
         cityMalls.put("Bangalore", bangaloreMalls);
         if(cityMalls.containsKey(city)) {
